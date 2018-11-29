@@ -1,5 +1,7 @@
 # do
 
+[![Build Status](https://travis-ci.com/guaraqe/do.svg?branch=master)](https://travis-ci.com/guaraqe/do)
+
 The @do@ tool defines commands line interfaces in folders using a @do.nix@ file.
 Since the Nix language is used, we get imports and functions for free, which allow to reuse and generate command line interfaces.
 
