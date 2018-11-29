@@ -1,0 +1,85 @@
+name:
+  do
+version:
+  0.1.0
+synopsis:
+  A tool for defining command line interfaces in folders.
+description:
+  The @do@ tool defines commands line interfaces in folders using a @do.nix@
+  file  Since the Nix language is used, we get imports and functions for free,
+  which allow to reuse and generate command line interfaces.
+license:
+  BSD3
+author:
+  mail@guaraqe.gq
+maintainer:
+  mail@guaraqe.gq
+build-type:
+  Simple
+cabal-version:
+  >=1.10
+extra-source-files:
+  test/data/*
+
+executable do
+  main-is:
+    Main.hs
+  build-depends:
+    do,
+    base,
+    directory,
+    text
+  hs-source-dirs:
+    app
+  ghc-options:
+    -O2
+    -Wall
+  default-language:
+    Haskell2010
+
+library
+  exposed-modules:
+    Do.CLI
+    Do.Parser
+    Do.Run
+    Do.Types
+  build-depends:
+    base,
+    containers,
+    data-fix,
+    directory,
+    hnix,
+    microlens,
+    optparse-applicative,
+    process,
+    time,
+    transformers,
+    text,
+    unordered-containers
+  hs-source-dirs:
+    src
+  default-extensions:
+    LambdaCase
+    OverloadedStrings
+  ghc-options:
+    -O2
+    -Wall
+  default-language:
+    Haskell2010
+
+test-suite tests
+  type:
+    exitcode-stdio-1.0
+  main-is:
+    Main.hs
+  build-depends:
+    do,
+    base,
+    directory,
+    tasty,
+    tasty-hunit,
+    text
+  hs-source-dirs:
+    test
+  default-language:
+    Haskell2010
