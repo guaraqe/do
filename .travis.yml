@@ -1,2 +1,8 @@
 language: nix
 script: nix-build release.nix -A do
+notifications:
+  email:
+    recipients:
+      - mail@guaraqe.gq
+    on_success: never
+    on_failure: always
