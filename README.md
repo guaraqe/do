@@ -63,7 +63,7 @@ That will give you the following commands:
 
 ```
 $ do # Shows the possible commands
-$ do echo --word Hi
+$ do echo --word Hi # Executes ./echo.sh "Hi"
 $ do ls
 $ do subcommand ls
 ```
@@ -79,6 +79,10 @@ Each case behaves differently:
 This was decided so that Shell scripts can also be used manually if wanted, but to allow inline scripts to be more clear about their variables.
 
 For the moment, variables must always passed to `do` as explicit flags.
+
+## Limitations
+
+The evaluation of Nix expressions is done using [`hnix`](https://github.com/haskell-nix/hnix), so we are limited by its current evaluation capacity.
 
 ## TO DO
 
