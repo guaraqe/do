@@ -23,8 +23,8 @@ import qualified Nix
 parseScripts :: Text -> IO CommandSet
 parseScripts file =
   case Nix.parseNixText file of
-    Nix.Failure _ ->
-      error "Could not parse do.nix file"
+    Nix.Failure e ->
+      error $ "Could not parse do.nix file:\n" ++ show e
     Nix.Success expr -> do
       nix <- evalNix expr
       case runExcept (getCommandSet nix) of
