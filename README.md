@@ -52,7 +52,8 @@ Write the following `do.nix` file in your folder:
   subcommand = {
     ls = {
       help = "Shows the folder contents";
-      script = "ls";
+      vars = [ "folder" ];
+      script = "ls $folder";
     };
 
   };
@@ -65,24 +66,59 @@ That will give you the following commands:
 $ do # Shows the possible commands
 $ do echo --word Hi # Executes ./echo.sh "Hi"
 $ do ls
-$ do subcommand ls
+$ do subcommand ls --folder app
 ```
 
 ## How it works
 
-Scripts can be either files or inline scripts.
+Each commands has a `script` attricute that can be either a file or an inline script.
 Each case behaves differently:
 
-- when the script is a file, variables are passed to the script as positional arguments, in the order in which the variables are defined in the `do.nix` file;
+- when the script is a file, variables are passed to the script as positional arguments, in the order in which the variables are defined in the `vars` attribute;
 - when the script is inline, variables are passed as environment variables.
 
-This was decided so that Shell scripts can also be used manually if wanted, but to allow inline scripts to be more clear about their variables.
+This is done so that shell scripts can also be used manually if wanted, and checked with [`shellcheck`](https://github.com/koalaman/shellcheck), but at the same time to allow inline scripts to be more clear about their variables.
 
 For the moment, variables must always be passed to `do` as explicit flags.
+
+## Use case: subprojects
+
+Suppose you have subprojects `project1` and `project2` in your repository, living in subfolders with the same name.
+Each project can have its own `do.nix` file in its respective folder, and one can create a parent `do.nix` with the following contents:
+
+```nix
+{
+  project1 = import ./project1/do.nix;
+  project2 = import ./project2/do.nix;
+}
+```
+
+which will give access to the subprojects commands from the top level.
+
+For this to work, one has to guarantee that the commands to be executed take into account the good folder, which can be done by giving the folder as an explicit parameter with Nix.
+
+## Use case: multiple projects with the same language
+
+Suppose you have subprojects `project1` and `project2` in your repository, living in subfolders with the same name, written in the same language.
+Both will have commands that are the same, like `build` and `test`, therefore that can be factored out.
+
+One can create a `do-lang.nix` file with the good commands at the top level, and import it at the subproject level:
+
+```nix
+import ../do-lang.nix //
+
+{
+  some-command = {
+    script = "echo hi";
+  };
+}
+```
 
 ## Limitations
 
 The evaluation of Nix expressions is done using [`hnix`](https://github.com/haskell-nix/hnix), so we are limited by its current evaluation capacity.
+In particular, evaluating (most?) derivations from `nixpkgs` is not possible.
+However, this is not a big problem since we can delegate the task of giving executables by either calling `nix-shell` in the script, or by executing the `do` commands inside a `nix-shell`.
 
 ## TO DO
 
