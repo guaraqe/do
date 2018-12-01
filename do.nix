@@ -22,4 +22,18 @@
     '';
   };
 
+  repl = {
+    help = "Open the project in the repl";
+    script = ''
+      cabal repl lib:do
+    '';
+  };
+
+  ghcid = {
+    help = "Open the project in the ghcid";
+    script = ''
+      ghcid --command "cabal repl lib:do"
+    '';
+  };
+
 }
