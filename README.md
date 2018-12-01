@@ -78,7 +78,7 @@ Each case behaves differently:
 
 This was decided so that Shell scripts can also be used manually if wanted, but to allow inline scripts to be more clear about their variables.
 
-For the moment, variables must always passed to `do` as explicit flags.
+For the moment, variables must always be passed to `do` as explicit flags.
 
 ## Limitations
 
