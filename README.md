@@ -18,6 +18,8 @@ It aims to:
 In `do`, the commands, flags and scripts are declared using a `do.nix` file.
 Since the Nix language is used, we get imports and functions for free, which allows to easily reuse and generate command line interfaces.
 
+[Nix](https://nixos.org/nix/) must be installed for it to work completely.
+
 ## Installing
 
 Installation can be done using `cabal`:
