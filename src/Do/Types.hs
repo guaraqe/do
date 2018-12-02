@@ -28,9 +28,7 @@ import qualified Data.Map.Strict as Map
 -- | The script that is run by the command. It can either:
 -- * the script file path, or
 -- * the script text.
-data Script =
-    ScriptPath FilePath
-  | ScriptText Text
+newtype Script = Script Text
   deriving (Show, Eq)
 
 --------------------------------------------------------------------------------

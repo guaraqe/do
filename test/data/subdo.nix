@@ -2,12 +2,12 @@
   with-variable = {
     help = "Repeats the word";
     vars = [ "word" ];
-    script = ./echo.sh;
+    script = "${./echo.sh} $word";
   };
 
   no-variable = {
     help = "Shows the folder contents";
-    script = ./ls.sh;
+    script = "${./ls.sh}";
   };
 
 }

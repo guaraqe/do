@@ -5,15 +5,13 @@ module Do.Run
 import Do.Types
 
 import Data.Text (unpack)
-import System.Process (callProcess, callCommand)
+import System.Process (callCommand)
 
 --------------------------------------------------------------------------------
 
 runCommand :: Command -> [Val] -> IO ()
 runCommand script vals =
   case command_script script of
-    ScriptPath file ->
-      callProcess file $ fmap runValStr vals
-    ScriptText contents ->
+    Script contents ->
       callCommand $ unlines $
          map runValEnv vals ++ [unpack contents]

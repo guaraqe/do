@@ -41,7 +41,7 @@ Write the following `do.nix` file in your folder:
   echo = {
     help = "Repeats the word";
     vars = [ "word" ];
-    script = ./echo.sh;
+    script = "${./echo.sh} $word";
   };
 
   ls = {
@@ -69,16 +69,8 @@ $ do ls
 $ do subcommand ls --folder app
 ```
 
-## How it works
-
-Each commands has a `script` attricute that can be either a file or an inline script.
-Each case behaves differently:
-
-- when the script is a file, variables are passed to the script as positional arguments, in the order in which the variables are defined in the `vars` attribute;
-- when the script is inline, variables are passed as environment variables.
-
-This is done so that shell scripts can also be used manually if wanted, and checked with [`shellcheck`](https://github.com/koalaman/shellcheck), but at the same time to allow inline scripts to be more clear about their variables.
-
+Each command has a `script` attribute that is an inline script.
+Variables are passed to scripts as environment variables.
 For the moment, variables must always be passed to `do` as explicit flags.
 
 ## Use case: subprojects

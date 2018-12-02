@@ -28,7 +28,7 @@ parseScripts file =
     Nix.Success expr -> do
       nix <- evalNix expr
       case runExcept (getCommandSet nix) of
-        Left e -> error $ Text.unpack e
+        Left e -> error $ unlines $ fmap Text.unpack e
         Right s -> pure s
 
 --------------------------------------------------------------------------------
@@ -46,36 +46,29 @@ evalNix expr = do
 
 --------------------------------------------------------------------------------
 
--- Get a file path from the Nix value.
-getPath :: NValue -> Except Text FilePath
-getPath (Fix val) =
-  case preview Nix._NVPathF val of
-    Nothing -> throwE "Value is not a filepath."
-    Just x -> pure x
-
 -- Get a string from the Nix value.
-getText :: NValue -> Except Text Text
+getText :: NValue -> Except [Text] Text
 getText (Fix val) =
   case preview Nix._NVStrF val of
-    Nothing -> throwE "Value is not a string."
+    Nothing -> throwE $ pure "Value is not a string."
     Just (x,_) -> pure x
 
 -- Get a list from the Nix value.
-getListWith :: (NValue -> Except Text a) -> NValue -> Except Text [a]
+getListWith :: (NValue -> Except [Text] a) -> NValue -> Except [Text] [a]
 getListWith f (Fix val) =
   case preview Nix._NVListF val of
-    Nothing -> throwE "Value is not a list."
+    Nothing -> throwE $ pure "Value is not a list."
     Just l ->  traverse f l
 
 -- Get a @Script@ from the Nix value..
-getCommandText :: NValue -> Except Text Script
+getCommandText :: NValue -> Except [Text] Script
 getCommandText val =
-  fmap ScriptPath (getPath val) <|> fmap ScriptText (getText val)
+  fmap Script (getText val)
 
 --------------------------------------------------------------------------------
 
 -- | Get @Command@ from the Nix value.
-getCommand :: NValue -> Except Text Command
+getCommand :: NValue -> Except [Text] Command
 getCommand (Fix (Nix.NVSetF expr _)) = do
   script <-
     getCommandText =<<
@@ -93,13 +86,13 @@ getCommand (Fix (Nix.NVSetF expr _)) = do
     Command script vars help
 
 getCommand _ =
-  throwE "Nix expression does not evaluate to a set."
+  throwE $ pure "Nix expression does not evaluate to a set."
 
 toMap :: HashMap Text a -> Map Text a
 toMap = Map.fromList . HashMap.toList
 
 -- | Get @CommandSet@ from the Nix value.
-getCommandSet :: NValue -> Except Text CommandSet
+getCommandSet :: NValue -> Except [Text] CommandSet
 getCommandSet (Fix (Nix.NVSetF expr _)) =
   let
     getter s =
@@ -108,14 +101,14 @@ getCommandSet (Fix (Nix.NVSetF expr _)) =
     mkCommandSet . toMap <$> traverse getter expr
 
 getCommandSet _ =
-  throwE "Nix expression does not evaluate to a set."
+  throwE $ pure "Nix expression does not evaluate to a set."
 
 --------------------------------------------------------------------------------
 
-getKey :: Text -> HashMap Text a -> Except Text a
+getKey :: Text -> HashMap Text a -> Except [Text] a
 getKey k m =
   case HashMap.lookup k m of
-    Nothing -> throwE $ "Set does not have key " <> k
+    Nothing -> throwE $ pure $ "Set does not have key " <> k <> "."
     Just a -> pure a
 
 getKeyWithDefault :: a -> Text -> HashMap Text a -> a

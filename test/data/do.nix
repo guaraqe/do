@@ -1,22 +1,11 @@
 {
-  file-with-variable = {
+  variable = {
     help = "Repeats the word";
     vars = [ "word" ];
-    script = ./echo.sh;
+    script = "${./echo.sh} $word";
   };
 
-  file-no-variable = {
-    help = "Shows the folder contents";
-    script = ./ls.sh;
-  };
-
-  text-with-variable = {
-    help = "Repeats the word";
-    vars = [ "word" ];
-    script = "echo $word";
-  };
-
-  text-no-variables = {
+  no-variables = {
     help = "Shows the folder contents";
     script = "ls";
   };
