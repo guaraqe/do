@@ -1,6 +1,7 @@
 { mkDerivation, base, containers, data-fix, directory, hnix
 , microlens, optparse-applicative, process, stdenv, tasty
 , tasty-hunit, text, time, transformers, unordered-containers
+, nix
 }:
 mkDerivation {
   pname = "do";
@@ -15,6 +16,7 @@ mkDerivation {
   ];
   executableHaskellDepends = [ base directory text ];
   testHaskellDepends = [ base directory tasty tasty-hunit text ];
+  testDepends = [ nix ];
   description = "A tool for defining command line interfaces in folders";
   license = stdenv.lib.licenses.bsd3;
 }

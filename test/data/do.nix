@@ -2,7 +2,7 @@
   variable = {
     help = "Repeats the word";
     vars = [ "word" ];
-    script = "${./echo.sh} $word";
+    script = "./echo.sh $word";
   };
 
   no-variables = {

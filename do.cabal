@@ -19,7 +19,11 @@ build-type:
 cabal-version:
   >=1.10
 extra-source-files:
-  test/data/*
+  README.md
+  test/data/*.nix
+  test/data/*.sh
+  test/data/folder/*.nix
+  test/data/folder/*.sh
 
 executable do
   main-is:
